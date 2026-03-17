@@ -83,6 +83,7 @@ function expenseAdd(newExpense) {
         expenseList.append(expenseItem);
 
         updateExpenseCount();
+        clearForm();
     }
     catch (error) {
         console.error("Erro ao adicionar despesa:", error);
@@ -100,7 +101,9 @@ function updateExpenseCount() {
 
         expensesQuantity.textContent = `${items.length} ${items.length > 1 ? "despesas" : "despesa"}`;
 
+
         let totalAmount = 0;
+
         for (let item = 0; item < items.length; item++) {
             const itemAmount = items[item].querySelector(".expense-amount")
             //remove caracteres não numéricos e substitui virgula por ponto para conversão correta
@@ -118,10 +121,11 @@ function updateExpenseCount() {
 
 
         }
+
         const symbolBRL = document.createElement("small");
         symbolBRL.textContent = "R$";
         totalAmount = formatCurrency(totalAmount).toUpperCase().replace("R$", "")
-        
+
 
         expensesTotal.innerHTML = "";
         //adiciona simbolo da moeda e o valor total
@@ -137,3 +141,22 @@ function updateExpenseCount() {
     }
 }
 
+//CAPTURA OS CLIQUES NO ITENS DA LISTA
+expenseList.addEventListener("click", (e) => {
+    //verifica se o clique foi no ícone de remover
+    if (e.target.classList.contains("remove-icon")) {
+        //obtem li pai do elemento clicado.
+        const item = e.target.closest(".expense");
+
+        item.remove()
+     }
+     updateExpenseCount();
+})
+
+function clearForm() {
+    expense.value = "";
+    category.value="";
+    amount.value = "";  
+
+    expense.focus()
+}
